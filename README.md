@@ -21,26 +21,38 @@ infrared plugin add all
 
 ## Make change depending on your memory Availability
 in infared/plugins/virsh/defaults/topology/nodes/controller.yml change the Memory designation to something like 10000 not 32000
+
 in infared/plugins/virsh/defaults/topology/nodes/undercloud.yml change the Memory designation to something like 10000 not 16000
+
 Warning this may vary depending on your hardware and if you overcommit, commet in the Overcommit = True below if you want to overcommit memory. This will make your installation run slow.
 
 ### Test infrared  ###
 infrared virsh --host-address 127.0.0.1 --host-key ~/.ssh/id_rsa --topology-nodes "undercloud:1,controller:1,compute:1"
+
 If you have less than 52 GB of memory used
+
 infrared virsh --host-address 127.0.0.1 --host-key ~/.ssh/id_rsa --topology-nodes "undercloud:1,controller:1,compute:1" ##--host-memory-overcommit True##
 
 or use the file
 
 cat <<EOF >> virsh_prov.ini
+
 [virsh]
+
 host-key = ~/.ssh/id_rsa
+
 host-address = 127.0.0.1
+
 topology-nodes = undercloud:1,controller:1,compute:1
+
 host-user = root
+
 ##host-memory-overcommit = True##
+
 EOF
 
 and run
+
 infrared virsh -vv --from-file=virsh_prov.ini |& tee -a virsh_install.txt
 
 
